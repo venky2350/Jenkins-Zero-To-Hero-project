@@ -11,8 +11,7 @@ pipeline {
         sh 'mvn clean install'
       }
     }
-  }
-   stage('Checkout') {
+    stage('Checkout') {
       steps {
         sh 'echo passed'
         //git branch: 'main', url: 'https://github.com/venky2350/Jenkins-Zero-To-Hero-project.git'
@@ -71,3 +70,4 @@ pipeline {
         }
     }
   }
+}
