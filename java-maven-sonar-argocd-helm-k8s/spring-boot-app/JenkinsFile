@@ -1,17 +1,17 @@
 pipeline {
-  agent {
+  agent any{
     docker {
       image 'venkatesh384/maven-venkatesh-docker-agent:v1'
       args '--user root -v /var/run/docker.sock:/var/run/docker.sock' // mount Docker socket to access the host's Docker daemon
     }
   }
   stages {
-    stage('clone') {
+    stage('Checkout') {
       steps {
-        checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/venky2350/Jenkins-Zero-To-Hero-project.git']])
+        sh 'echo passed'
+        //git branch: 'main', url: 'https://github.com/venky2350/Jenkins-Zero-To-Hero-project.git'
       }
     }
-  }
     stage('Build and Test') {
       steps {
         sh 'ls -ltr'
@@ -65,3 +65,4 @@ pipeline {
         }
     }
   }
+}
