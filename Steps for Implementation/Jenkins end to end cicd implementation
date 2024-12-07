@@ -1,0 +1,18 @@
+### 
+// Open AWS Console --> launch instance --> Name(ultimate-cicd-demo) --> ubuntu server 24.04 LTS --> t2.large --> select key pair --> Network settings(click on edit) and give required Add security group rule --> Configure storage(20 GB) --> launch instance.
+// we have to clone that repository from GitHub to our local machine.
+// connect server and give our repository path like the below:
+>> required installations: 
+   # sudo apt update -y 
+   # sudo apt install maven -y && apt install docker.io -y
+   # sudo apt install openjdk-11-jre -y
+ -------------------------------------------------------------------------------   
+   # cd ~/OneDrive/Desktop/Git Clone/Jenkins-Zero-To-Hero-project (main)
+   # cd java-maven-sonar-argocd-helm-k8s/
+   # cd spring-boot-app
+   # mvn clean package
+   # docker build -t ultimate-cicd-pipeline:v1
+   # docker run -d -p 8010:8080 -t ultimate-cicd-pipeline:v1
+>> Copy ec2 instance public ip and Open browser paste it here with port 8010 --> It will run successfully because we can give security group rule type(All traffic).
+
+!!Note: We can give All traffic practice purpose only, in real time we can use Custom TCP.
