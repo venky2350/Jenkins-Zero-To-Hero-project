@@ -16,3 +16,47 @@
 >> Copy ec2 instance public ip and Open browser paste it here with port 8010 --> It will run successfully because we can give security group rule type(All traffic).
 
 !!Note: We can give All traffic practice purpose only, in real time we can use Custom TCP.
+
+>> The installation of jenkins we have to follow the repository.
+>> After completion of jenkins we can give the following command,
+    # ps -ef |grep jenkins
+>> Here we can see java web archive file.
+>> jenkins run on public ip: 8080 --> go to browser and paste it public ip of required instance:8080 --> copy /var/lib/jenkins path --> go to server 
+    # cat paste it here --> copy Administrator password
+>> go to jenkins server and paste it here --> give our credentials or else skip and continue --> Now we can see jenkins dashboard --> we can click on new item --> Name (ultimate-demo) --> Here freestyle project // a legacy way of configuring means the traditional way of configuring but the good way of doing it is using the jenkins pipeline,
+click on pipeline --> scroll down and select pipeline script from SCM --> SCM (choose git) --> Repository URL (give our github repository URL) --> Branch specifier(either master or main) --> script path (java-maven-sonar-argocd-helm-k8s/spring-boot-app/JenkinsFile) --> Apply and save.
+>> Go to jenkins dashboard --> click on Manage jenkins --> Choose plugins --> select Available plugins -->search docker pipeline(select Docker pipeline) -->search sonar (select sonarscanner) --> go to server
+   # adduser sonarqube    --> give password and click on next,
+   # apt install unzip
+   # sudo su -sonarqube
+   # wget https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-9.4.0.54424.zip
+   # unzip *
+   #chmod -R 755 /home/sonarqube/sonarqube-9.4.0.54424
+   #chown -R sonarqube:sonarqube /home/sonarqube/sonarqube-9.4.0.54424
+   #cd sonarqube-9.4.0.54424/bin/linux-x86-64/
+   #./sonar.sh start
+   --------------------------------------------------------------------------------------
+>> If there any issue follow the below command, 
+   # docker run -d --name sonar -p 9000:9000 sonarqube:lts-community
+   --------------------------------------------------------------------------------------
+>> Go to instances and select ultimate-cicd-demo --> copy public ip --> go to browser and paste it here:9000 --> The default username and password is admin --> Click on my account --> Click on security --> Generate Tokens (type Jenkins) --> Click on Generate --> Copy the token --> go to jenkins --> Manage jenkins --> Click on manage credentials --> Click on system --> Global credentials --> Add credentials --> select secret text --> secret (paste it secret token) --> ID (sonarqube) --> Description (sonarqube) --> create.
+>> we can give the following required permissions to jenkins user and ubuntu user,
+   #usermod -aG docker jenkins
+   #usermod -aG docker ubuntu
+   #systemctl restart docker
+>> Now we have to restart jenkins --> It will ask Username and password, so give required credentials.
+>> Go to jenkins dashboard --> Click on Manage jenkins --> Click on Credentials --> System --> global credentials --> Add credentials --> Username (Docker username) --> password (Dockerhub password) --> ID (docker-cred) --> create.
+>> we can create GitHub credentials --> Manage jenkins --> Click on Credentials --> System --> global credentials --> Add credentials --> Choose (Secret text) --> go to github --> click on settings --> click on developer settings --> choose personal access tokens --> click on Tokens (classic) --> Click on Generate new token --> classic --> //we can enter into github at the first time it can ask credentials --> Name (jenkins) --> expiration (7days) --> select all --> Click on Generate token --> Copy token and paste it in secret --> If any configurations after that restart jenkins.
+
+>> We are moving to Argo CD part, so we can follow the below URL links as per our requirement, Choose carefully our requirement is  Ubuntu (24.04 LTS) or Ubuntu (22.04 LTS),
+   1. https://www.fosstechnix.com/install-argocd-on-minikube-with-ubuntu-24-04/
+                             (or)
+   2. https://www.fosstechnix.com/how-to-install-argocd-on-minikube/
+
+>> The above commands guided to do each and everything for we can entering into Argo CD dashboard --> then click on create application --> Application Name (Test) --> Project Name (default) --> Sync (Automatic) --> Repository URL (https://github.com/venky2350/Jenkins-Zero-To-Hero-project.git) --> Revision [HEAD] --> path (java-maven-sonar-argocd-helm-k8s/spring-boot-app-manifests) --> Cluster URL (https://kubernetes.default.svc) --> Namespace (default) --> Create --> Click on Sync.
+   # kubectl get deploy 
+   # kubectl get pods 
+   # kubectl edit deploy spring-boot-app
+>> Suppose we can change  -image:venkatesh384/ultimate-cicd:2 instead of venkatesh384/ultimate-cicd:1
+>> Go to Argo CD and refresh it --> Click on test --> Click on Diff --> It can show what will happen in the file that is advantage of Argo CD. 
+
